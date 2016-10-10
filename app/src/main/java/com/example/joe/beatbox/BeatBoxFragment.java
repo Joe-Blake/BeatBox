@@ -28,7 +28,7 @@ public class BeatBoxFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //保留该fragment
+        //保留 因设备配置改变(旋转)而准备销毁的 fragment实例对象,仅销毁视图
         setRetainInstance(true);
 
         mBeatBox = new BeatBox(getActivity());
@@ -87,9 +87,9 @@ public class BeatBoxFragment extends Fragment {
         }
 
         @Override
-        public SoundHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public SoundHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             LayoutInflater inflater = LayoutInflater.from(getActivity());
-            return new SoundHolder(inflater, viewGroup);
+            return new SoundHolder(inflater, parent);
         }
 
         @Override

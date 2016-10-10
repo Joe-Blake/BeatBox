@@ -1,7 +1,7 @@
 package com.example.joe.beatbox;
 
 /**
- *
+ * 音频信息类
  * Created by joe on 2016/10/10.
  */
 

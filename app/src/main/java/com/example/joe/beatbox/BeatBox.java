@@ -92,7 +92,7 @@ public class BeatBox {
             return;
         }
         /**
-         * params id,左音量,右音量,优先级(无效),是否循环(无限循环 -1),播放速率
+         * params: id,左音量,右音量,优先级(无效),是否循环(无限循环 -1),播放速率
          * 最大音量,常速播放
          */
         mSoundPool.play(soundId, 1.0f, 1.0f, 1, 0, 1.0f);
