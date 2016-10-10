@@ -10,15 +10,28 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import java.util.List;
+
 /**
  * Created by joe on 2016/10/7.
  */
 
 public class BeatBoxFragment extends Fragment {
 
+    private BeatBox mBeatBox;
 
     public static BeatBoxFragment newInstance(){
         return new BeatBoxFragment();
+    }
+
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        //保留该fragment
+        setRetainInstance(true);
+
+        mBeatBox = new BeatBox(getActivity());
     }
 
     @Nullable
@@ -31,36 +44,63 @@ public class BeatBoxFragment extends Fragment {
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id
                 .fragment_beat_box_recycle_view);
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));
-        recyclerView.setAdapter(new SoundAdapter());
+        recyclerView.setAdapter(new SoundAdapter(mBeatBox.getSounds()));
 
         return view;
     }
 
-    private class SoundHold extends RecyclerView.ViewHolder {
-        private Button mButton;
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mBeatBox.release();
+    }
 
-        public SoundHold(LayoutInflater inflater, ViewGroup container) {
+    private class SoundHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+        private Button mButton;
+        private Sound mSound;
+
+        public SoundHolder(LayoutInflater inflater, ViewGroup container) {
             super(inflater.inflate(R.layout.list_item_sound, container, false));
 
             mButton = (Button) itemView.findViewById(R.id.list_item_sound_button);
+            mButton.setOnClickListener(this);
+        }
+
+        //绑定sound
+        public void bindSound(Sound sound) {
+            mSound = sound;
+            mButton.setText(mSound.getName());
+        }
+
+        @Override
+        public void onClick(View v) {
+            mBeatBox.play(mSound);
         }
     }
-    private class SoundAdapter extends RecyclerView.Adapter<SoundHold> {
 
+    private class SoundAdapter extends RecyclerView.Adapter<SoundHolder> {
 
-        @Override
-        public SoundHold onCreateViewHolder(ViewGroup parent, int viewType) {
-            return null;
+        private List<Sound> mSounds;
+
+        public SoundAdapter(List<Sound> sounds) {
+            mSounds = sounds;
         }
 
         @Override
-        public void onBindViewHolder(SoundHold holder, int position) {
+        public SoundHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+            LayoutInflater inflater = LayoutInflater.from(getActivity());
+            return new SoundHolder(inflater, viewGroup);
+        }
 
+        @Override
+        public void onBindViewHolder(SoundHolder soundHold, int position) {
+            Sound sound = mSounds.get(position);
+            soundHold.bindSound(sound);
         }
 
         @Override
         public int getItemCount() {
-            return 0;
+            return mSounds.size();
         }
     }
 
