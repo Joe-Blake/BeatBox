@@ -54,7 +54,7 @@ public class BeatBox {
             Log.e(TAG,"Couldn't list assets", e);
             return;
         }
-        //比那里添加sound
+
         for (String fileName : soundNames) {
             String assetPath = SOUNDS_FOLDER + "/" + fileName;
             Sound sound = new Sound(assetPath);
